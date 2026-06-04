@@ -1,0 +1,22 @@
+stages:
+  preprocess:
+    cmd: python3 preprocess_dataset.py
+    deps:
+    - preprocess_dataset.py
+    - raw_dataset/weather.csv
+    - utils_and_constants.py
+    outs:
+    - processed_dataset/weather.csv
+  hp_tune:
+    # Set the hyperparameter tuning command
+    cmd: python3 hp_tuning.py
+    deps:
+    - processed_dataset/weather.csv
+    # Specify the hyperparameter configuration as dependency
+    - hp_config.json
+    # Specify the hyperparameter script as dependency
+    - ____
+    - utils_and_constants.py
+    outs:
+      - hp_tuning_results.md:
+          cache: false
