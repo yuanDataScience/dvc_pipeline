@@ -2,15 +2,12 @@ import pandas as pd
 
 from utils import (
     DROP_COLUMNS,
-    TARGET_ENCODE_COLUMNS,
-    ONE_HOT_COLUMNS,
-    NUMERICAL_COLUMNS,
     TRAINING_DATASET,
+    TESTING_DATASET,
     TARGET_COLUMN,
     FILL_COLUMNS,
-    PROCESSED_DATASET,
-    SEED,
-    load_data
+    PROCESSED_TRAINING_DATASET,
+    PROCESSED_TESTING_DATASET
 )
 
 
@@ -33,6 +30,17 @@ def fill_missing_values(df: pd.DataFrame, cols: list[str], replace_value: str) -
     return df
 
 
+def preprocess_data(file_input_path: str, file_output_path:str) -> None:
+
+    df = read_data(file_input_path)
+    df = drop_columns(df, DROP_COLUMNS)
+
+    df = convert_column_values(df, TARGET_COLUMN, {'<=50K': 0, '>50K': 1})
+    df = fill_missing_values(df, FILL_COLUMNS, 'other')
+
+    df.to_csv(file_output_path, index=False)
+
+
 def main():
     """
     Reads the raw data file, processes data and saves the processed data
@@ -44,13 +52,8 @@ def main():
     Target column values are expected in binary format with Yes/No values
     """
 
-    df = read_data(TRAINING_DATASET)
-    df = drop_columns(df, DROP_COLUMNS)
-
-    df = convert_column_values(df, TARGET_COLUMN, {'<=50K': 0, '>50K': 1})
-    df = fill_missing_values(df, FILL_COLUMNS, 'other')
-
-    df.to_csv(PROCESSED_DATASET, index=False)
+    preprocess_data(TRAINING_DATASET, PROCESSED_TRAINING_DATASET)
+    preprocess_data(TESTING_DATASET, PROCESSED_TESTING_DATASET)
 
 
 if __name__ == "__main__":

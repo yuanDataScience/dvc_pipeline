@@ -1,22 +1,55 @@
 stages:
   preprocess:
-    cmd: python3 preprocess_dataset.py
+    cmd: python3 src/preprocess_dataset.py
     deps:
-    - preprocess_dataset.py
-    - raw_dataset/weather.csv
-    - utils_and_constants.py
+    - src/preprocess_dataset.py
+    - raw_dataset/train.csv
+    - src/utils.py
     outs:
-    - processed_dataset/weather.csv
+    - processed_dataset/train.csv
   hp_tune:
     # Set the hyperparameter tuning command
-    cmd: python3 hp_tuning.py
+    cmd: python3 src/hp_tuning.py
+    params:
+    - train.n_estimators
+    - train.max_depth
     deps:
-    - processed_dataset/weather.csv
-    # Specify the hyperparameter configuration as dependency
-    - hp_config.json
+    - processed_dataset/train.csv
     # Specify the hyperparameter script as dependency
-    - ____
-    - utils_and_constants.py
+    - src/hp_tuning.py
+    - src/utils.py
     outs:
-      - hp_tuning_results.md:
+    - optimized_outputs/hp_tuning_results.md:
+        cache: false # track by git, not dvc
+    - optimized_outputs/rfc_best_params.json:
+        cache: false # track by git, not dvc
+  train:
+    cmd: python3 src/train.py
+    deps:
+      - src/metrics_and_plots.py
+      - src/model.py
+      - processed_dataset/train.csv
+      - processed_dataset/test.csv
+      - optimized_outputs/rfc_best_params.json
+      - src/train.py
+      - src/utils.py
+    metrics:
+      - metrics.json:
+          cache: false
+    plots:
+      - predictions.csv:
+          template: confusion
+          x: predicted_label
+          y: true_label
+          x_label: 'Predicted label'
+          y_label: 'True label'
+          title: Confusion matrix
+          cache: false
+      - roc_curve.csv:
+          template: simple
+          x: fpr
+          y: tpr
+          x_label: 'False Positive Rate'
+          y_label: 'True Positive Rate'
+          title: ROC curve
           cache: false
