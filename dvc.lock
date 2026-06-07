@@ -24,3 +24,79 @@ stages:
       hash: md5
       md5: 688ec37b1d3cca351567fc560152b7d8
       size: 3517432
+  hp_tune:
+    cmd: python src/hp_tune.py
+    deps:
+    - path: data/processed_dataset/train.csv
+      hash: md5
+      md5: 688ec37b1d3cca351567fc560152b7d8
+      size: 3517432
+    - path: src/hp_tune.py
+      hash: md5
+      md5: b0b74d044a4f193bb955d1ba52fc8263
+      size: 3176
+    - path: src/utils.py
+      hash: md5
+      md5: f03f51d6e1a1a011b735547059a15993
+      size: 5404
+    params:
+      params.yaml:
+        train.max_depth:
+          min: 2
+          max: 20
+        train.n_estimators:
+          min: 50
+          max: 400
+    outs:
+    - path: optimized_outputs/hp_tuning_results.md
+      hash: md5
+      md5: 2803840c3077db7becc756a8a8e23b73
+      size: 1666
+    - path: optimized_outputs/rfc_best_params.json
+      hash: md5
+      md5: 01215865b0ff6a54515eb54ab262fb47
+      size: 58
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed_dataset/test.csv
+      hash: md5
+      md5: c2d7ae2036753fa945dafb6dfbb2a269
+      size: 1172724
+    - path: data/processed_dataset/train.csv
+      hash: md5
+      md5: 688ec37b1d3cca351567fc560152b7d8
+      size: 3517432
+    - path: optimized_outputs/rfc_best_params.json
+      hash: md5
+      md5: 01215865b0ff6a54515eb54ab262fb47
+      size: 58
+    - path: src/metrics_and_plots.py
+      hash: md5
+      md5: e0f3446cc7bdb39272f1374b721996d5
+      size: 1104
+    - path: src/model.py
+      hash: md5
+      md5: 8877da85663991e1bf3271d4ea94dd8a
+      size: 1244
+    - path: src/train.py
+      hash: md5
+      md5: b0a89141ec97402c279a9481318ce5be
+      size: 1046
+    - path: src/utils.py
+      hash: md5
+      md5: f03f51d6e1a1a011b735547059a15993
+      size: 5404
+    outs:
+    - path: metrics_plots_outputs/metrics.json
+      hash: md5
+      md5: 28b0ed647b685da26d3d046cf21d957d
+      size: 79
+    - path: metrics_plots_outputs/predictions.csv
+      hash: md5
+      md5: 47f7b0b67f527d70c11c531217808093
+      size: 61083
+    - path: metrics_plots_outputs/roc_curve.csv
+      hash: md5
+      md5: 4276570e982cae3d7613c846efa8d555
+      size: 92513
