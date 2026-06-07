@@ -1,20 +1,20 @@
 stages:
   preprocess:
-    cmd: python3 src/preprocess_dataset.py
+    cmd: python src/process_dataset.py
     deps:
-    - src/preprocess_dataset.py
-    - raw_dataset/train.csv
+    - src/process_dataset.py
+    - data/raw_dataset/train.csv
     - src/utils.py
     outs:
-    - processed_dataset/train.csv
+    - data/processed_dataset/train.csv
   hp_tune:
     # Set the hyperparameter tuning command
-    cmd: python3 src/hp_tuning.py
+    cmd: python src/hp_tuning.py
     params:
     - train.n_estimators
     - train.max_depth
     deps:
-    - processed_dataset/train.csv
+    - data/processed_dataset/train.csv
     # Specify the hyperparameter script as dependency
     - src/hp_tuning.py
     - src/utils.py
@@ -24,12 +24,12 @@ stages:
     - optimized_outputs/rfc_best_params.json:
         cache: false # track by git, not dvc
   train:
-    cmd: python3 src/train.py
+    cmd: python src/train.py
     deps:
       - src/metrics_and_plots.py
       - src/model.py
-      - processed_dataset/train.csv
-      - processed_dataset/test.csv
+      - data/processed_dataset/train.csv
+      - data/processed_dataset/test.csv
       - optimized_outputs/rfc_best_params.json
       - src/train.py
       - src/utils.py
