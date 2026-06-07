@@ -23,10 +23,10 @@ ONE_HOT_COLUMNS: list[str] = ["race", "sex"]
 NUMERICAL_COLUMNS: list[str] = ["age", "fnlwgt", "education-num", "capital-gain",
                      "capital-loss", "hours-per-week"]
 TARGET_COLUMN: str = "class"
-TRAINING_DATASET: str = "raw_dataset/train.csv"
-TESTING_DATASET: str = "raw_dataset/test.csv"
-PROCESSED_TRAINING_DATASET: str = "processed_dataset/train.csv"
-PROCESSED_TESTING_DATASET: str = "processed_dataset/test.csv"
+TRAINING_DATASET: str = "data/raw_dataset/train.csv"
+TESTING_DATASET: str = "data/raw_dataset/test.csv"
+PROCESSED_TRAINING_DATASET: str = "data/processed_dataset/train.csv"
+PROCESSED_TESTING_DATASET: str = "data/processed_dataset/test.csv"
 RFC_BEST_PARRMS: str = "optimized_outputs/rfc_best_params.json"
 HP_TUNE_RESULTS: str = "optimized_outputs/hp_tuning_results.md"
 CONFUSION_METRICS_OUTPUT: str = "metrics_plots_outputs/confusion_matrix.png"
@@ -155,3 +155,11 @@ def get_hp_tuning_results(study: optuna.study.study.Study) -> str:
     cv_results.sort_values(by="cv_mean", ascending=False, inplace=True)
 
     return cv_results.to_markdown(index=False)
+
+
+def main():
+    initialize_dataset()
+
+
+if __name__ == "__main__":
+    main()
