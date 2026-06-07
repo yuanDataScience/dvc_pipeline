@@ -35,10 +35,10 @@ stages:
       - src/train.py
       - src/utils.py
     metrics:
-      - metrics.json:
+      - metrics_plots_outputs/metrics.json:
           cache: false
     plots:
-      - predictions.csv:
+      - metrics_plots_outputs/predictions.csv:
           template: confusion
           x: predicted_label
           y: true_label
@@ -46,7 +46,7 @@ stages:
           y_label: 'True label'
           title: Confusion matrix
           cache: false
-      - roc_curve.csv:
+      - metrics_plots_outputs/roc_curve.csv:
           template: simple
           x: fpr
           y: tpr
