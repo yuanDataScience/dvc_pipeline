@@ -16,6 +16,10 @@ stages:
       md5: f03f51d6e1a1a011b735547059a15993
       size: 5404
     outs:
+    - path: data/processed_dataset/test.csv
+      hash: md5
+      md5: c2d7ae2036753fa945dafb6dfbb2a269
+      size: 1172724
     - path: data/processed_dataset/train.csv
       hash: md5
       md5: 688ec37b1d3cca351567fc560152b7d8

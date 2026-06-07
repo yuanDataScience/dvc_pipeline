@@ -7,6 +7,7 @@ stages:
     - src/utils.py
     outs:
     - data/processed_dataset/train.csv
+    - data/processed_dataset/test.csv
   hp_tune:
     # Set the hyperparameter tuning command
     cmd: python src/hp_tuning.py
