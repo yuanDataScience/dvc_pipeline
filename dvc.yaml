@@ -10,14 +10,14 @@ stages:
     - data/processed_dataset/test.csv
   hp_tune:
     # Set the hyperparameter tuning command
-    cmd: python src/hp_tuning.py
+    cmd: python src/hp_tune.py
     params:
     - train.n_estimators
     - train.max_depth
     deps:
     - data/processed_dataset/train.csv
     # Specify the hyperparameter script as dependency
-    - src/hp_tuning.py
+    - src/hp_tune.py
     - src/utils.py
     outs:
     - optimized_outputs/hp_tuning_results.md:
